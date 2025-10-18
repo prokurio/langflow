@@ -12,7 +12,8 @@ blocks:
           commands:
             - checkout
             - 'echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin'
-            - 'docker build . -t "${DOCKER_USERNAME}"/prokurio-ai:latest -f ./langflow/docker/build_and_push.Dockerfile '
+            - 'docker build . -t "${DOCKER_USERNAME}"/prokurio-ai:latest -f ./langflow/docker/build_and_push.Dockerfile'
+            - 'ls '
             - 'aws lightsail push-container-image --region central-2 --service-name prokurio-ai --label prokurio-ai --image "${DOCKER_USERNAME}"/prokurio-ai:latest'
       secrets:
         - name: AWS
