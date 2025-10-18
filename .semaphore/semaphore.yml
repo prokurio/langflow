@@ -11,7 +11,16 @@ blocks:
         - name: docker build
           commands:
             - checkout
-            - docker build -t your-image .
+            - 'echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin'
+            - 'docker build . -t "${DOCKER_USERNAME}"/prokurio-ai:latest '
+            - 'aws lightsail push-container-image --region central-2 --service-name prokurio-ai --label prokurio-ai --image "${DOCKER_USERNAME}"/prokurio-ai:latest'
       secrets:
         - name: AWS
         - name: Docker Hub
+      prologue:
+        commands:
+          - 'curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"'
+          - unzip awscliv2.zip
+          - sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+          - 'sudo curl "https://s3.us-west-2.amazonaws.com/lightsailctl/latest/linux-amd64/lightsailctl" -o "/usr/local/bin/lightsailctl"'
+          - sudo chmod +x /usr/local/bin/lightsailctl
