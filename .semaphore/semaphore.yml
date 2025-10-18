@@ -12,3 +12,6 @@ blocks:
           commands:
             - checkout
             - docker build -t your-image .
+      secrets:
+        - name: AWS
+        - name: Docker Hub
